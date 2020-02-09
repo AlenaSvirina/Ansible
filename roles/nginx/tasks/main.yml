@@ -1,16 +1,16 @@
 ---
 # tasks file for nginx
 
-- name: Install Nginx
+- name: install nginx
   yum: name=nginx
   become: yes
 
-- name: Ensure Nginx Service Running and Enabled
+- name: start and enable nginx
   service: name=nginx state=started enabled=yes
   become: yes
 
-# Update Default Home Page
-- name: Deploy Customized Home Page
+# update default home page
+- name: deploy customized home page
   copy:
     src: nginx_home.html
     dest: /usr/share/nginx/html/index.html

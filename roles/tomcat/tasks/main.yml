@@ -22,7 +22,7 @@
     mode: 0755
   become: yes
 
-- name: Unarchive Tomcat from remote source
+- name: unarchive tomcat from remote source
   unarchive:
     src: "http://apache-mirror.rbc.ru/pub/apache/tomcat/tomcat-8/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
     dest: "{{ tomcat_home }}"
@@ -31,15 +31,15 @@
     remote_src: yes
   become: yes
 
-# Because of Archive structure, all files are extracted into {{tomcat_home}}/apache-tomcat-x.x.xx
-- name: Create a Link
+# because of archive structure, all files are extracted into {{tomcat_home}}/apache-tomcat-x.x.xx
+- name: create a link
   file: 
     src: "{{ tomcat_home }}/apache-tomcat-{{ tomcat_version }}"
     path: "{{ tomcat_home }}/current"
     state: link
   become: yes
 
-- name: Deploy Systemd File
+- name: deploy systemd file
   template:
     src: tomcat.service.j2
     dest: /usr/lib/systemd/system/tomcat.service
@@ -47,7 +47,7 @@
     - systemd daemon reload
   become: yes
 
-- name: Ensure Tomcat Service Running and Enabled
+- name: start and enable tomcat
   service: name=tomcat state=started enabled=yes
   become: yes  
 

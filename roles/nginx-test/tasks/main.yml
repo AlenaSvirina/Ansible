@@ -1,19 +1,19 @@
 ---
 # tasks file for nginx-test
 
-- name: test nginx
+- name: check nginx's status
   shell: systemctl status nginx
-  register: status_nginx
+  register: status
   become: yes
 
 - debug:
-    msg: "{{ status_nginx.stdout }}"
+    msg: "{{ status.stdout }}"
 
-- name: test nginx2
+- name: test nginx
   shell: curl localhost
-  register: status_nginx2
+  register: test_nginx
   args:
     warn: false
 
 - debug:
-    msg: "{{ status_nginx2.stdout }}"
+    msg: "{{ test_nginx.stdout }}"
