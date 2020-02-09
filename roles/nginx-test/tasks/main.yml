@@ -1,0 +1,19 @@
+---
+# tasks file for nginx-test
+
+- name: test nginx
+  shell: systemctl status nginx
+  register: status_nginx
+  become: yes
+
+- debug:
+    msg: "{{ status_nginx.stdout }}"
+
+- name: test nginx2
+  shell: curl localhost
+  register: status_nginx2
+  args:
+    warn: false
+
+- debug:
+    msg: "{{ status_nginx2.stdout }}"

@@ -1,0 +1,2 @@
+[nodes]
+client ansible_host=10.19.12.10 ansible_port=22 ansible_user=alenka ansible_connection=ssh

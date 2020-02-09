@@ -1,0 +1,11 @@
+---
+# tasks file for java-test
+
+- name: check java installation
+  command: java -version
+  register: java
+  ignore_errors: yes
+
+- debug:
+    msg: '{{ java.stderr }}'
+  when: java.stderr is defined

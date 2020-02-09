@@ -1,0 +1,10 @@
+---
+# tasks file for java
+
+- name: yum update
+  yum: update_cache=yes
+  become: yes
+
+- name: install jdk
+  yum: name=java-{{ java_version }}-openjdk
+  become: yes

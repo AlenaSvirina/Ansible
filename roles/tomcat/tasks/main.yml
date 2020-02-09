@@ -1,0 +1,54 @@
+---
+# tasks file for tomcat
+- name: add tomcat group 
+  group:
+    name: '{{ tomcat_group }}'
+    state: present
+  become: yes
+
+- name: add tomcat user
+  user:
+    name: '{{ tomcat_user }}'
+    group: '{{ tomcat_group }}'
+    state: present
+  become: yes
+
+- name: create tomcat home folder
+  file:
+    path: "{{ tomcat_home }}"
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    state: directory
+    mode: 0755
+  become: yes
+
+- name: Unarchive Tomcat from remote source
+  unarchive:
+    src: "http://apache-mirror.rbc.ru/pub/apache/tomcat/tomcat-8/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    dest: "{{ tomcat_home }}"
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    remote_src: yes
+  become: yes
+
+# Because of Archive structure, all files are extracted into {{tomcat_home}}/apache-tomcat-x.x.xx
+- name: Create a Link
+  file: 
+    src: "{{ tomcat_home }}/apache-tomcat-{{ tomcat_version }}"
+    path: "{{ tomcat_home }}/current"
+    state: link
+  become: yes
+
+- name: Deploy Systemd File
+  template:
+    src: tomcat.service.j2
+    dest: /usr/lib/systemd/system/tomcat.service
+  notify:
+    - systemd daemon reload
+  become: yes
+
+- name: Ensure Tomcat Service Running and Enabled
+  service: name=tomcat state=started enabled=yes
+  become: yes  
+
+

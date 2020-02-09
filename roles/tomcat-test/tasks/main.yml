@@ -1,0 +1,9 @@
+---
+# tasks file for tomcat-test
+- name: Check tomcat's status
+  command: systemctl status tomcat
+  register: status_tomcat
+  become: yes
+
+- debug:
+    msg: "{{ status_tomcat.stdout }}"
